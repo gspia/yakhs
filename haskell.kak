@@ -443,7 +443,7 @@ define-command -hidden haskell-indent-to-fst-clause %{
 # Initialization
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
-hook -group haskell-highlight2 global WinSetOption filetype=haskell %{
+hook -group haskell-highlight global WinSetOption filetype=haskell %{
     add-highlighter window/haskell ref haskell
 }
 
@@ -465,7 +465,7 @@ hook global WinSetOption filetype=haskell %¤
     hook window InsertChar > haskell-indent-on-fsig-arrow
 ¤
 
-hook -group haskell-highlight2 global WinSetOption filetype=(?!haskell).* %{
+hook -group haskell-highlight global WinSetOption filetype=(?!haskell).* %{
     remove-highlighter window/haskell
 }
 
@@ -474,3 +474,7 @@ hook global WinSetOption filetype=(?!haskell).* %{
     remove-hooks window haskell-nlmods
     remove-hooks window haskell-hooks
 }
+
+
+
+
