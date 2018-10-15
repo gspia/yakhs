@@ -18,7 +18,8 @@ declare-option -hidden range-specs hs_fnames_range
 
 add-highlighter shared/haskell regions
 add-highlighter shared/haskell/code default-region group
-add-highlighter shared/haskell/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" fill string
+# add-highlighter shared/haskell/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" fill string
+add-highlighter shared/haskell/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" group
 add-highlighter shared/haskell/macro   region ^\h*?\K#           (?<!\\)\n     fill meta
 add-highlighter shared/haskell/pragma  region -recurse \{- \{-#       '#-\}' fill meta
 add-highlighter shared/haskell/comment region -recurse \{-  \{-        -\}   group
@@ -30,6 +31,8 @@ add-highlighter shared/haskell/line-comment region --(?:[^!#$%&*+./<>?@\\\^|~=]|
 # add-highlighter shared/haskell/pragma  fill meta
 # add-highlighter shared/haskell/macro   fill meta
 # add-highlighter shared/haskell/where   fill meta
+
+add-highlighter shared/haskell/string/  fill string
 
 add-highlighter shared/haskell/comment/ fill comment
 add-highlighter shared/haskell/comment/ regex \b(TBD|TODO|[Tt]odo)\b 0:red
@@ -105,7 +108,13 @@ add-highlighter shared/haskell/code/ regex \B'([^\\]|[\\]['"\w\d\\])' 0:string
 #
 add-highlighter shared/haskell/code/ regex [\[|\]|\{|\}|\(|\)|,] 0:operator
 
-add-highlighter shared/haskell/code/ show-matching
+# add-highlighter shared/haskell/ show-matching # this doesn't work
+# While the following work separately, they don't in the cases where the parenthesis
+# cross regions. Better to turn on the show-matching in the kakrc globally.
+# add-highlighter shared/haskell/string/ show-matching
+# add-highlighter shared/haskell/code/ show-matching
+# add-highlighter shared/haskell/comment/ show-matching
+# add-highlighter shared/haskell/line-comment/ show-matching
 
 
 #define-command -hidden haskell-hl-fnames %{
@@ -221,13 +230,20 @@ define-command -hidden haskell-indent-on-nl-where %{
 
 
 define-command -hidden haskell-indent-on-nl-import %{
-    evaluate-commands -draft -itersel %{
+    evaluate-commands -itersel %{
         execute-keys \;
         # The following are for 'import' -handling.
         # If the prev line starts with import, move the cursor to the fst col.
         # try %{ execute-keys -draft kXs ^import\h+ <ret>gh}
-        try %{ execute-keys -draft kxXs (^\Kimport\h+.*$\n)\h+ <ret>c<esc>\i<c-r>1 }
-        try %{ execute-keys -draft kxX <a-K> ^import\h+qualified\h+ <ret> s ^import\h+([\S|\h]*$\n) <ret>c<esc>\iimport<space><space><space><space><space><space><space><space><space><space><space><c-r>1 
+        # try %{ execute-keys -draft kxXs (^\Kimport\h+.*$\n)\h+ <ret>c<esc>\i<c-r>1 }
+        try %{
+            execute-keys -draft k<a-x> <a-K> ^$ <ret>
+            try %{ execute-keys -draft kx <a-K> ^import\h+qualified\h+ <ret> s ^import\h+([\S|\h]*$\n) <ret>c<esc>\iimport<space><space><space><space><space><space><space><space><space><space><space><c-r>1
+            }
+        } catch %{
+            #  prev line was empty, thus the cursor in the 1st column
+            try %{ execute-keys -draft <a-x> <a-K> ^import\h+qualified\h+ <ret> s ^import\h+([\S|\h]*$\n) <ret>c<esc>\iimport<space><space><space><space><space><space><space><space><space><space><space><c-r>1
+            }
         }
     }
 }
@@ -372,7 +388,7 @@ define-command -hidden haskell-indent-on-nl-function-sigs %{
         # But only for functions that start from col 1...
         # Note, we don't indent lines that end with 'do' or '=' as they are indented
         # later.
-        try %{ execute-keys -draft k x <a-K> (::|∷|\bdo|\bmdo|\brec\h*$|=\h*$) <ret> <a-k> ^\w <ret> j <a-gt> }
+        try %{ execute-keys -draft k x <a-K> (::|∷|\bdo|\bmdo|\brec\h*$|=\h*$|^import\b) <ret> <a-k> ^\w <ret> j <a-gt> }
     }
 }
 
@@ -397,7 +413,7 @@ define-command -hidden haskell-indent-on-new-line %{
         # If there is [ or (, don't indent.  (They are on 'on-opening'.)
         # Note the dirty thing with closing brace (zero or one) between end-of-line
         # and newline char...  Somehow braces don't seem to work well here.
-        try %¤ execute-keys -draft k x X s ^\h+\K[^\[\(\{\s].*$\}?\n. <ret> <a-S> & ¤
+        #try %¤ execute-keys -draft k x X s ^\h+\K[^\[\(\{\s].*$\}?\n. <ret> <a-S> & ¤
         #
         haskell-indent-on-nl-bar-char
         #
@@ -416,7 +432,7 @@ define-command -hidden haskell-indent-on-new-line %{
         # 'Let' and 'where' removed as it is handled by the fst-clause.
         # This adds indentation.
         # But not for lines whose prev lines are comments or start with import.
-        try %¤ execute-keys -draft <a-x> <a-K> (^\h*--[\w\h])|(^where\h+) <ret> k x <a-k> ^\h*(if)|(case\h+[\w']+\h+of|\bdo|\bmdo|\brec|[=/\$\*\+&,]|(?<!-)-)$ <ret> j <a-gt> ¤
+        try %¤ execute-keys -draft <a-x> <a-K> (^\h*--[\w\h])|(^where\h+)|(^import\h+) <ret> k x <a-k> ^\h*(if)|(case\h+[\w']+\h+of|\bdo|\bmdo|\brec|[=/\$\*\+&,]|(?<!-)-)$ <ret> j <a-gt> ¤
         }
     }
 }
