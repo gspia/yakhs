@@ -413,7 +413,7 @@ define-command -hidden haskell-indent-on-new-line %{
         # If there is [ or (, don't indent.  (They are on 'on-opening'.)
         # Note the dirty thing with closing brace (zero or one) between end-of-line
         # and newline char...  Somehow braces don't seem to work well here.
-        #try %¤ execute-keys -draft k x X s ^\h+\K[^\[\(\{\s].*$\}?\n. <ret> <a-S> & ¤
+        try %¤ execute-keys -draft k x X s ^\h+\K[^\[\(\{\s].*$\}?\n. <ret> <a-S> & ¤
         #
         haskell-indent-on-nl-bar-char
         #
