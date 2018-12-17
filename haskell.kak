@@ -40,9 +40,9 @@ add-highlighter shared/haskell/line-comment/  fill comment
 add-highlighter shared/haskell/line-comment/ regex \b(TBD|TODO|[Tt]odo)\b 0:red
 
 # Other can override this one.
-add-highlighter shared/haskell/code/ regex ^[a-z][\w|'0-9]*\h 0:function
-add-highlighter shared/haskell/code/ regex ^\h+[a-z][\w|'0-9]*\h+(?=::\h) 0:function
-add-highlighter shared/haskell/code/ regex ^\h+[a-z][\w|'0-9]*\h+(?=∷\h) 0:function
+add-highlighter shared/haskell/code/ regex ^[a-z][\w|'0-9]*\s 0:function
+add-highlighter shared/haskell/code/ regex ^\h+[a-z][\w|'0-9]*\s+(?=::\s) 0:function
+add-highlighter shared/haskell/code/ regex ^\h+[a-z][\w|'0-9]*\s+(?=∷\s) 0:function
 # add-highlighter shared/haskell/code regex ^\h+[a-z][\w|'0-9]*\h+(?<=(::|∷)) 0:function
 # add-highlighter shared/haskell/code regex (^\h+)(where\n)(\1) 2:function
 
