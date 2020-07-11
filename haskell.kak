@@ -1,4 +1,4 @@
-# http://haskell.org
+# http://haskell2.org
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # This is based on the 'kakoune/rc/base/haskell.kak'.
 #
@@ -7,7 +7,7 @@
 # ‾‾‾‾‾‾‾‾‾
 
 hook global BufCreate .*[.](hs) %{
-    set-option buffer filetype haskell
+    set-option buffer filetype haskell2
 }
 
 # Highlighters
@@ -16,47 +16,52 @@ hook global BufCreate .*[.](hs) %{
 declare-option -hidden range-specs hs_fnames_range
 
 
-add-highlighter shared/haskell regions
-add-highlighter shared/haskell/code default-region group
-# add-highlighter shared/haskell/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" fill string
-add-highlighter shared/haskell/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" group
-add-highlighter shared/haskell/macro   region ^\h*?\K#           (?<!\\)\n     fill meta
-add-highlighter shared/haskell/pragma  region -recurse \{- \{-#       '#-\}' fill meta
-add-highlighter shared/haskell/comment region -recurse \{-  \{-        -\}   group
-add-highlighter shared/haskell/line-comment region --(?:[^!#$%&*+./<>?@\\\^|~=]|$) $  group
-# add-highlighter shared/haskell/line-comment region --(?:[^!#$%&*+./<>?@\\\^|~=]|$) $  fill comment
+add-highlighter shared/haskell2 regions
+add-highlighter shared/haskell2/code default-region group
+# add-highlighter shared/haskell2/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" fill string
+add-highlighter shared/haskell2/string  region (?<!'\\)(?<!')"  (?<!\\)(\\\\)*" group
+add-highlighter shared/haskell2/macro   region ^\h*?\K#           (?<!\\)\n     fill meta
+add-highlighter shared/haskell2/pragma  region -recurse \{- \{-#       '#-\}' fill meta
+add-highlighter shared/haskell2/comment region -recurse \{-  \{-        -\}   group
+add-highlighter shared/haskell2/line-comment region --(?:[^!#$%&*+./<>?@\\\^|~=]|$) $  group
+# add-highlighter shared/haskell2/line-comment region --(?:[^!#$%&*+./<>?@\\\^|~=]|$) $  fill comment
 
-# add-highlighter shared/haskell/string  fill string
-# add-highlighter shared/haskell/comment fill comment
-# add-highlighter shared/haskell/pragma  fill meta
-# add-highlighter shared/haskell/macro   fill meta
-# add-highlighter shared/haskell/where   fill meta
+# add-highlighter shared/haskell2/string  fill string
+# add-highlighter shared/haskell2/comment fill comment
+# add-highlighter shared/haskell2/pragma  fill meta
+# add-highlighter shared/haskell2/macro   fill meta
+# add-highlighter shared/haskell2/where   fill meta
 
-add-highlighter shared/haskell/string/  fill string
+add-highlighter shared/haskell2/string/  fill string
 
-add-highlighter shared/haskell/comment/ fill comment
-add-highlighter shared/haskell/comment/ regex \b(TBD|TODO|[Tt]odo)\b 0:red
-add-highlighter shared/haskell/line-comment/  fill comment
-add-highlighter shared/haskell/line-comment/ regex \b(TBD|TODO|[Tt]odo)\b 0:red
+add-highlighter shared/haskell2/comment/ fill comment
+add-highlighter shared/haskell2/comment/ regex \b(TBD|TODO|[Tt]odo)\b 0:red
+add-highlighter shared/haskell2/comment/ regex .\h+$ 0:red 1:red
+add-highlighter shared/haskell2/comment/ regex \w\h{2,} 0:red 1:red
+add-highlighter shared/haskell2/line-comment/  fill comment
+add-highlighter shared/haskell2/line-comment/ regex \b(TBD|TODO|[Tt]odo)\b 0:red
+add-highlighter shared/haskell2/line-comment/ regex .\h+$ 0:red 1:red
+add-highlighter shared/haskell2/line-comment/ regex \w\h{2,} 0:red 1:red
 
 # Other can override this one.
-add-highlighter shared/haskell/code/ regex ^[a-z][\w|'0-9]*\s 0:function
-add-highlighter shared/haskell/code/ regex ^\h+[a-z][\w|'0-9]*\s+(?=::\s) 0:function
-add-highlighter shared/haskell/code/ regex ^\h+[a-z][\w|'0-9]*\s+(?=∷\s) 0:function
-# add-highlighter shared/haskell/code regex ^\h+[a-z][\w|'0-9]*\h+(?<=(::|∷)) 0:function
-# add-highlighter shared/haskell/code regex (^\h+)(where\n)(\1) 2:function
+add-highlighter shared/haskell2/code/ regex ^[a-z][\w|'0-9]*\s 0:function
+add-highlighter shared/haskell2/code/ regex ^\h+[a-z][\w|'0-9]*\s+(?=::\s) 0:function
+add-highlighter shared/haskell2/code/ regex ^\h+[a-z][\w|'0-9]*\s+(?=∷\s) 0:function
+# add-highlighter shared/haskell2/code regex ^\h+[a-z][\w|'0-9]*\h+(?<=(::|∷)) 0:function
+# add-highlighter shared/haskell2/code regex (^\h+)(where\n)(\1) 2:function
 
 # For some special words
-add-highlighter shared/haskell/code/ regex \bundefined\b 0:red
-add-highlighter shared/haskell/code/ regex \bwarning\b 0:red
-add-highlighter shared/haskell/code/ regex \berror\b 0:red
+add-highlighter shared/haskell2/code/ regex \bundefined\b 0:red
+add-highlighter shared/haskell2/code/ regex \bwarning\b 0:red
+add-highlighter shared/haskell2/code/ regex \berror\b 0:red
 
-add-highlighter shared/haskell/code/ regex (?<!')\b0x+[A-Fa-f0-9]+ 0:value
-add-highlighter shared/haskell/code/ regex (?<!')\b\d+([.]\d+)? 0:value
-add-highlighter shared/haskell/code/ regex (?<!')\b(import|hiding|qualified|module)(?!')\b 0:keyword
-add-highlighter shared/haskell/code/ regex (?<!')\b(import)(?!')\b[^\n]+(?<!')\b(as)(?!')\b 2:keyword
-add-highlighter shared/haskell/code/ regex (?<!')\b(class|data|default|deriving|infix|infixl|infixr|instance|module|newtype|pattern|type|where|pure|return)(?!')\b 0:keyword
-add-highlighter shared/haskell/code/ regex (?<!')\b(case|do|else|if|in|let|mdo|of|proc|rec|then|otherwise)(?!')\b 0:attribute
+add-highlighter shared/haskell2/code/ regex (?<!')\b0x+[A-Fa-f0-9]+ 0:value
+add-highlighter shared/haskell2/code/ regex (?<!')\b\d+([.]\d+)? 0:value
+add-highlighter shared/haskell2/code/ regex (?<!')\b(import|hiding|qualified|module)(?!')\b 0:keyword
+add-highlighter shared/haskell2/code/ regex (?<!')\b(import)(?!')\b[^\n]+(?<!')\b(as)(?!')\b 2:keyword
+add-highlighter shared/haskell2/code/ regex (?<!')\b(class|data|default|deriving|infix|infixl|infixr|instance|module|newtype|pattern|type|type\hfamily|where|pure|return)(?!')\b 0:keyword
+add-highlighter shared/haskell2/code/ regex (?<!')\b(case|do|else|if|in|let|mdo|of|proc|rec|then|otherwise)(?!')\b 0:attribute
+add-highlighter shared/haskell2/code/ regex (?<!')\b(deriving)(?!')\b\h+\b(stock)(?!')\b 0:keyword
 
 # copy something into i register
 # exec -draft -save-regs '' "ghGih\"i*"
@@ -72,52 +77,52 @@ add-highlighter shared/haskell/code/ regex (?<!')\b(case|do|else|if|in|let|mdo|o
 
 # matches uppercase identifiers:  Monad Control.Monad
 # not non-space separated dot:    Just.const
-add-highlighter shared/haskell/code/ regex \b([A-Z]['\w]*\.)*[A-Z]['\w]* 0:variable
-# add-highlighter shared/haskell/code regex \b([A-Z]['\w]*\.)*[A-Z]['\w]*(?!['\w])(?![.\l]) 0:variable
+add-highlighter shared/haskell2/code/ regex \b([A-Z]['\w]*\.)*[A-Z]['\w]* 0:variable
+# add-highlighter shared/haskell2/code regex \b([A-Z]['\w]*\.)*[A-Z]['\w]*(?!['\w])(?![.\l]) 0:variable
 
 # matches infix identifier: `mod` `Apa._T'M`
-add-highlighter shared/haskell/code/ regex `\b([A-Z]['\w]*\.)*[\w]['\w]*` 0:operator
+add-highlighter shared/haskell2/code/ regex `\b([A-Z]['\w]*\.)*[\w]['\w]*` 0:operator
 
 # matches imported operators: M.! M.. Control.Monad.>>
 # not operator keywords:      M... M.->
-add-highlighter shared/haskell/code/ regex \b[A-Z]['\w]*\.[~<=>|:!?/.@$*&#%+\^\-\\]+ 0:operator
+add-highlighter shared/haskell2/code/ regex \b[A-Z]['\w]*\.[~<=>|:!?/.@$*&#%+\^\-\\]+ 0:operator
 # matches dot: .
 # not possibly incomplete import:  a.
 # not other operators:             !. .!
-add-highlighter shared/haskell/code/ regex (?<![\w~<=>|:!?/.@$*&#%+\^\-\\])\.(?![~<=>|:!?/.@$*&#%+\^\-\\]) 0:operator
+add-highlighter shared/haskell2/code/ regex (?<![\w~<=>|:!?/.@$*&#%+\^\-\\])\.(?![~<=>|:!?/.@$*&#%+\^\-\\]) 0:operator
 
 # matches other operators: ... > < <= ^ <*> <$> etc
 # not dot: .
 # not operator keywords:  @ .. -> :: ~
-add-highlighter shared/haskell/code/ regex (?<![~<=>|:!?/.@$*&#%+\^\-\\])[~<=>|:!?/.@$*&#%+\^\-\\]+ 0:operator
+add-highlighter shared/haskell2/code/ regex (?<![~<=>|:!?/.@$*&#%+\^\-\\])[~<=>|:!?/.@$*&#%+\^\-\\]+ 0:operator
 
 # matches operator keywords: @ ->
-add-highlighter shared/haskell/code/ regex (?<![~<=>|:!?/.@$*&#%+\^\-\\])(@|~|<-|←|->|→|=>|⇒|::|∷|=|:|[|])(?![~<=>|:!?/.@$*&#%+\^\-\\]) 1:keyword
+add-highlighter shared/haskell2/code/ regex (?<![~<=>|:!?/.@$*&#%+\^\-\\])(@|~|<-|←|->|→|=>|⇒|::|∷|=|:|[|])(?![~<=>|:!?/.@$*&#%+\^\-\\]) 1:keyword
 
 # matches: forall [..variables..] 
 # not the variables
-add-highlighter shared/haskell/code/ regex \b(forall)\b[^.\n]*?(\.) 1:keyword 2:keyword
+add-highlighter shared/haskell2/code/ regex \b(forall)\b[^.\n]*?(\.) 1:keyword 2:keyword
 
 # matches 'x' '\\' '\'' '\n' '\0'
 # not incomplete literals: '\'
 # not valid identifiers:   w' _'
-add-highlighter shared/haskell/code/ regex \B'([^\\]|[\\]['"\w\d\\])' 0:string
+add-highlighter shared/haskell2/code/ regex \B'([^\\]|[\\]['"\w\d\\])' 0:string
 # this has to come after operators so '-' etc is correct
 
 # matches []{}(),
 #
-add-highlighter shared/haskell/code/ regex [\[|\]|\{|\}|\(|\)|,] 0:operator
+add-highlighter shared/haskell2/code/ regex [\[|\]|\{|\}|\(|\)|,] 0:operator
 
-# add-highlighter shared/haskell/ show-matching # this doesn't work
+# add-highlighter shared/haskell2/ show-matching # this doesn't work
 # While the following work separately, they don't in the cases where the parenthesis
 # cross regions. Better to turn on the show-matching in the kakrc globally.
-# add-highlighter shared/haskell/string/ show-matching
-# add-highlighter shared/haskell/code/ show-matching
-# add-highlighter shared/haskell/comment/ show-matching
-# add-highlighter shared/haskell/line-comment/ show-matching
+# add-highlighter shared/haskell2/string/ show-matching
+# add-highlighter shared/haskell2/code/ show-matching
+# add-highlighter shared/haskell2/comment/ show-matching
+# add-highlighter shared/haskell2/line-comment/ show-matching
 
 
-#define-command -hidden haskell-hl-fnames %{
+#define-command -hidden haskell2-hl-fnames %{
     #evaluate-commands -draft %{ %try{
         #execute-keys \%s  
         #set-option buffer hs_fnames_range %val{timestamp}
@@ -135,17 +140,17 @@ add-highlighter shared/haskell/code/ regex [\[|\]|\{|\}|\(|\)|,] 0:operator
 # ‾‾‾‾‾‾‾‾
 
 # http://en.wikibooks.org/wiki/Haskell/Indentation
-# https://github.com/tibbe/haskell-style-guide
-# https://wiki.haskell.org/Programming_guidelines
+# https://github.com/tibbe/haskell2-style-guide
+# https://wiki.haskell2.org/Programming_guidelines
 
-define-command -hidden haskell-filter-around-selections %{
+define-command -hidden haskell2-filter-around-selections %{
     # remove trailing white spaces
     try %{ execute-keys -draft -itersel <a-x> s \h+$ <ret> d }
 }
 
 # try %{ execute-keys -draft -itersel <a-x> s ab <ret> → }
 # 
-define-command -hidden haskell-replace-arrows %{
+define-command -hidden haskell2-replace-arrows %{
     evaluate-commands -draft -itersel %{
         # try %{ execute-keys -draft <a-x> s (?<lt>=\h)ab(?=\h) <ret> c ba <esc> }
         try %{ execute-keys -draft -itersel <a-x> s (?<lt>=\h)->(?=\h) <ret> c → <esc> }
@@ -160,9 +165,9 @@ define-command -hidden haskell-replace-arrows %{
     }
 }
 
-define-command -hidden haskell-on-new-line %{
+define-command -hidden haskell2-on-new-line %{
     evaluate-commands -draft -itersel %{
-        try %{ execute-keys -draft k : haskell-replace-arrows <ret> }
+        try %{ execute-keys -draft k : haskell2-replace-arrows <ret> }
     }
 }
 
@@ -172,7 +177,7 @@ define-command -hidden haskell-on-new-line %{
 # TBD TODO
 # Assume that this is called after entering '>'-char.
 # Do we need the following?  There is 'on-sigs' below.
-define-command -hidden haskell-indent-on-farrow %{
+define-command -hidden haskell2-indent-on-farrow %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # Indent the -> and → if the prev line starts with it and this too.
@@ -188,7 +193,7 @@ define-command -hidden haskell-indent-on-farrow %{
     }
 }
 
-define-command -hidden haskell-indent-on-nl-bar-char %{
+define-command -hidden haskell2-indent-on-nl-bar-char %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # Indent the | if the prev line starts with it and this too (but not on ||).
@@ -201,7 +206,7 @@ define-command -hidden haskell-indent-on-nl-bar-char %{
     }
 }
 
-define-command -hidden haskell-indent-on-bar-char %{
+define-command -hidden haskell2-indent-on-bar-char %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # Indent the | if the prev line starts with it and this too (but not on ||).
@@ -211,7 +216,7 @@ define-command -hidden haskell-indent-on-bar-char %{
     }
 }
 
-define-command -hidden haskell-indent-on-nl-where %{
+define-command -hidden haskell2-indent-on-nl-where %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # The following are for 'where' -handling
@@ -229,7 +234,7 @@ define-command -hidden haskell-indent-on-nl-where %{
 }
 
 
-define-command -hidden haskell-indent-on-nl-import %{
+define-command -hidden haskell2-indent-on-nl-import %{
     evaluate-commands -itersel %{
         execute-keys \;
         # The following are for 'import' -handling.
@@ -251,7 +256,7 @@ define-command -hidden haskell-indent-on-nl-import %{
 
 # Note that the line maybe indented already to fst non-whitespace.
 # Or not.  So the command to do aligment might have to check for it.
-define-command -hidden haskell-indent-on-nl-opening %{
+define-command -hidden haskell2-indent-on-nl-opening %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # The following three are for cases where the line is already indented.
@@ -349,7 +354,7 @@ define-command -hidden haskell-indent-on-nl-opening %{
     }
 }
 
-define-command -hidden haskell-indent-on-closing %<
+define-command -hidden haskell2-indent-on-closing %<
     # align to opening curly brace when alone on a line
     try %< execute-keys -itersel -draft <a-h><a-:><a-k>^\h*\}$<ret>hm<a-S>1<a-&>& >
     # align to opening ']' when alone on a line
@@ -361,14 +366,14 @@ define-command -hidden haskell-indent-on-closing %<
 
 # TODO TODO We should check that we are not in open block here when
 # inserting the comma in an empty line.
-define-command -hidden haskell-indent-on-comma %<
+define-command -hidden haskell2-indent-on-comma %<
     # align to previous comma when alone on a line
     # try %< execute-keys -itersel -draft \; kxXs,<ret>& >
     try %< execute-keys -itersel -draft \; <a-x><a-k> ^\h*, <ret> kxXs^\h*,<ret><a-S>1<a-&> >
 >
 
 # 
-define-command -hidden haskell-indent-on-fsig-arrow %{
+define-command -hidden haskell2-indent-on-fsig-arrow %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # If prev line is function signature, indent to ::
@@ -381,7 +386,7 @@ define-command -hidden haskell-indent-on-fsig-arrow %{
     }
 }
 
-define-command -hidden haskell-indent-on-nl-function-sigs %{
+define-command -hidden haskell2-indent-on-nl-function-sigs %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # Indent a line following function unless it is a signature.
@@ -393,7 +398,7 @@ define-command -hidden haskell-indent-on-nl-function-sigs %{
 }
 
 
-define-command -hidden haskell-indent-on-new-line %{
+define-command -hidden haskell2-indent-on-new-line %{
     # Note below:
     # \S means "not \s", that is, any char but whitespace.
     evaluate-commands -draft -itersel %{
@@ -406,8 +411,8 @@ define-command -hidden haskell-indent-on-new-line %{
         # preserve previous line indent (original below, we make this in another way)
         # try %{ execute-keys -draft \; K <a-&> }
         #
-        haskell-indent-on-nl-function-sigs
-        haskell-indent-on-fsig-arrow
+        haskell2-indent-on-nl-function-sigs
+        haskell2-indent-on-fsig-arrow
         #
         # If prev line is indented, indent on first non-space:
         # If there is [ or (, don't indent.  (They are on 'on-opening'.)
@@ -415,17 +420,17 @@ define-command -hidden haskell-indent-on-new-line %{
         # and newline char...  Somehow braces don't seem to work well here.
         try %¤ execute-keys -draft k x X s ^\h+\K[^\[\(\{\s].*$\}?\n. <ret> <a-S> & ¤
         #
-        haskell-indent-on-nl-bar-char
+        haskell2-indent-on-nl-bar-char
         #
-        haskell-indent-on-nl-opening
+        haskell2-indent-on-nl-opening
         #
-        haskell-indent-to-fst-clause
+        haskell2-indent-to-fst-clause
         #
         # filter previous line
-        try %{ execute-keys -draft k : haskell-filter-around-selections <ret> }
+        try %{ execute-keys -draft k : haskell2-filter-around-selections <ret> }
         #
-        haskell-indent-on-nl-where
-        haskell-indent-on-nl-import
+        haskell2-indent-on-nl-where
+        # haskell2-indent-on-nl-import
         #
         # Indent after lines beginning with condition or ending with expression or
         # with any of =&$+*-/,
@@ -442,7 +447,7 @@ define-command -hidden haskell-indent-on-new-line %{
 # Or not.
 # And the indentation can be after 'prev line indentation' or after 'on-opening'.
 # Thus we split this into two cases.
-define-command -hidden haskell-indent-to-fst-clause %{
+define-command -hidden haskell2-indent-to-fst-clause %{
     evaluate-commands -draft -itersel %{
         execute-keys \;
         # The following is for cases where the line is already indented.
@@ -459,36 +464,36 @@ define-command -hidden haskell-indent-to-fst-clause %{
 # Initialization
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 
-hook -group haskell-highlight global WinSetOption filetype=haskell %{
-    add-highlighter window/haskell ref haskell
+hook -group haskell2-highlight global WinSetOption filetype=haskell2 %{
+    add-highlighter window/haskell2 ref haskell2
 }
 
-hook global WinSetOption filetype=haskell %¤
+hook global WinSetOption filetype=haskell2 %¤
     set-option window extra_word_chars "'"
-    hook window ModeChange insert:.* -group haskell-hooks  haskell-filter-around-selections
-    hook window ModeChange insert:.* -group haskell-hooks  haskell-replace-arrows
-    # hook window InsertChar \n -group haskell-indent haskell-indent-on-new-line
-    hook window InsertChar \n -group haskell-nlmods %<
-        haskell-indent-on-new-line
-        haskell-on-new-line
+    hook window ModeChange insert:.* -group haskell2-hooks  haskell2-filter-around-selections
+    # hook window ModeChange insert:.* -group haskell2-hooks  haskell2-replace-arrows
+    # hook window InsertChar \n -group haskell2-indent haskell2-indent-on-new-line
+    hook window InsertChar \n -group haskell2-nlmods %<
+        haskell2-indent-on-new-line
+        # haskell2-on-new-line
     >
-    hook window InsertChar \| %{ haskell-indent-on-bar-char  }
+    hook window InsertChar \| %{ haskell2-indent-on-bar-char  }
     hook window InsertChar \t %< exec -draft -itersel <a-x>@ >
-    hook window InsertChar \} haskell-indent-on-closing
-    hook window InsertChar \] haskell-indent-on-closing
-    hook window InsertChar \) haskell-indent-on-closing
-    hook window InsertChar ,  haskell-indent-on-comma
-    hook window InsertChar > haskell-indent-on-fsig-arrow
+    hook window InsertChar \} haskell2-indent-on-closing
+    hook window InsertChar \] haskell2-indent-on-closing
+    hook window InsertChar \) haskell2-indent-on-closing
+    hook window InsertChar ,  haskell2-indent-on-comma
+    hook window InsertChar > haskell2-indent-on-fsig-arrow
 ¤
 
-hook -group haskell-highlight global WinSetOption filetype=(?!haskell).* %{
-    remove-highlighter window/haskell
+hook -group haskell2-highlight global WinSetOption filetype=(?!haskell2).* %{
+    remove-highlighter window/haskell2
 }
 
-    # remove-hooks window haskell-indent
-hook global WinSetOption filetype=(?!haskell).* %{
-    remove-hooks window haskell-nlmods
-    remove-hooks window haskell-hooks
+    # remove-hooks window haskell2-indent
+hook global WinSetOption filetype=(?!haskell2).* %{
+    remove-hooks window haskell2-nlmods
+    remove-hooks window haskell2-hooks
 }
 
 
